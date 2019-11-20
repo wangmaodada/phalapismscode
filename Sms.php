@@ -1,28 +1,3 @@
-# phalapismscode
-
-第一步 了解 phalapi 的操作方法；
-   这里是第一版的操作，这个会有一个错误产生，看实际操作 https://segmentfault.com/a/1190000016280823
-   
-第二步 配置参数的获取 
-
-ak 参数（了解阿里就知道是什么参数）
-短信发送和 code
-
-第三步 阿里云上的短信文档 
-https://dysms.console.aliyun.com/dysms.htm?spm=5176.12818093.recent.ddysms.488716d0qg8cYF#/quickStart
-
-第四步 文件下载配置
-https://image-static.segmentfault.com/625/311/625311003-5b8f90af49fbb_articlex
-
-第五步 参数复制 
-
-
-下方直接复制黏贴 哈哈
-"vendor/phalapi/aliyunsms/api_sdk/vendor/autoload.php",
-"vendor/phalapi/aliyunsms/msg_sdk/vendor/autoload.php"
-
-
-下方直接创建一个
 <?php 
 namespace App\Api;
 
@@ -38,7 +13,7 @@ use Aliyun\Api\Sms\Request\V20170525\QuerySendDetailsRequest;
  * 短信接口
  *  @auth wangmao 
  *  @desc 当前接口用来获取短信认证
- * 
+ *  @desc 当前接口已废弃
  */ 
 Config::load();
 
@@ -67,9 +42,8 @@ class Sms extends Api
         $domain = "dysmsapi.aliyuncs.com";
 
         // accesskey
-        //*******
         $accessKeyId = ""; // AccessKeyId
-        //************
+
         $accessKeySecret = ""; // AccessKeySecret
 
         // 暂时不支持多Region
@@ -117,8 +91,10 @@ class Sms extends Api
         $request->setTemplateCode($templateCode);
 
 
-        
+		
         // 可选，设置模板参数
+        //下方的array 可以自定义设置i并传递
+        //*****
         $request->setTemplateParam(json_encode(array("production"=>'问壶藏家',  // 短信模板中字段的值
             "code"=>$num
         ), JSON_UNESCAPED_UNICODE));
@@ -133,23 +109,22 @@ class Sms extends Api
 
         return $acsResponse;
     }
-    /**
-     * 获取验证码
-     * 
-     * 
-     */ 
-    public function getCode($data)
+	/**
+	 * 获取验证码
+	 * 
+	 * 
+	 */ 
+    public function setCode($data)
     {
-    //手机号
+ 
+        //调用当前函数传递手机号 验证码
         $phoneNumbers = $data['Mobile'];
-        //验证码
         $num=$data['code'];
-        $signName = '短信';
-        $templateCode = '短信模版';
+        $signName = '问壶藏家';
+        $templateCode = '模版';
         $outId=1231;
         $response = $this->sendSms($phoneNumbers,$signName,$templateCode,$outId,$num);
         return $response;
     }
 
 }
-
